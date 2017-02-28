@@ -44,13 +44,37 @@ class App extends Component {
   }
 
   render() {
-    const query = this.state.query;
+    const { query, list } = this.state;
     return (
       <div className="App">
+        <Search value={query} onChange={this.onSearchChange}>
+          Search
+        </Search>
+        <Table list={list} pattern={query} />
+      </div>
+    );
+  }
+}
+
+  class Search extends Component {
+
+    render () {
+      const { value, onChange, children } = this.props;
+      return (
         <form>
-          <input type="text" value={query} onChange={this.onSearchChange} />
+          {children} <input type="text" value={value} onChange={onChange} />
         </form>
-        { this.state.list.filter(isSearched(query)).map(item) =>
+      );
+    }
+  }
+
+  class Table extends Component {
+
+    render () {
+      const { list, pattern } = this.props;
+      return (
+        <div>
+        { list.filter(isSearched(pattern)).map((item) =>
             <div key={item.objectID}>
               <span><a href={item.url}>{item.title}</a></span>
               <span>{item.author}</span>
@@ -58,9 +82,9 @@ class App extends Component {
               <span>{item.points}</span>
             </div>
         )}
-      </div>
-    );
+        </div>
+      );
+    }
   }
-}
 
 export default App;
