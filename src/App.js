@@ -56,35 +56,59 @@ class App extends Component {
   }
 }
 
-  class Search extends Component {
+  // class Search extends Component {
+  //
+  //   render () {
+  //     const { value, onChange, children } = this.props;
+  //     return (
+  //       <form>
+  //         {children} <input type="text" value={value} onChange={onChange} />
+  //       </form>
+  //     );
+  //   }
+  // }
 
-    render () {
-      const { value, onChange, children } = this.props;
-      return (
-        <form>
-          {children} <input type="text" value={value} onChange={onChange} />
-        </form>
-      );
-    }
+  const Search = ({value, onChange, children}) => {
+    // Hacer algo
+    return (
+      <form>
+        {children} <input type="text" value={value} onChange={onChange} />
+      </form>
+    );
   }
 
-  class Table extends Component {
+  // class Table extends Component {
+  //
+  //   render () {
+  //     const { list, pattern } = this.props;
+  //     return (
+  //       <div>
+  //       { list.filter(isSearched(pattern)).map((item) =>
+  //           <div key={item.objectID}>
+  //             <span><a href={item.url}>{item.title}</a></span>
+  //             <span>{item.author}</span>
+  //             <span>{item.num_comments}</span>
+  //             <span>{item.points}</span>
+  //           </div>
+  //       )}
+  //       </div>
+  //     );
+  //   }
+  // }
 
-    render () {
-      const { list, pattern } = this.props;
-      return (
-        <div>
-        { list.filter(isSearched(pattern)).map((item) =>
-            <div key={item.objectID}>
-              <span><a href={item.url}>{item.title}</a></span>
-              <span>{item.author}</span>
-              <span>{item.num_comments}</span>
-              <span>{item.points}</span>
-            </div>
-        )}
+  const Table = ({ list, pattern }) => {
+    return (
+      <div>
+      { list.filter(isSearched(pattern)).map((item) =>
+        <div key={item.objectID}>
+          <span><a href={item.url}>{item.title}</a></span>
+          <span>{item.author}</span>
+          <span>{item.num_comments}</span>
+          <span>{item.points}</span>
         </div>
-      );
-    }
+      )}
+      </div>
+    );
   }
 
 export default App;
