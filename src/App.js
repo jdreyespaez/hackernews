@@ -1,36 +1,17 @@
 import React, { Component } from 'react';
 import './App.css';
 
-// const list = [
-//   {
-//     title: 'React',
-//     url: 'https://facebook.github.io/react/',
-//     author: 'Jordan Walke',
-//     num_comments: 3,
-//     points: 4,
-//     objectID: 0,
-//   },
-//   {
-//     title: 'Redux',
-//     url: 'https://github.com/reactjs/redux',
-//     author: 'Dan Abramov, Andrew Clark',
-//     num_comments: 2,
-//     points: 5,
-//     objectID: 1,
-//   },
-// ];
-
 const DEFAULT_QUERY = 'redux';
 
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
 
-function isSearched(query) {
-  return function(item) {
-    return !query || item.title.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-  }
-}
+// function isSearched(query) {
+//   return function(item) {
+//     return !query || item.title.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+//   }
+// }
 
 class App extends Component {
 
@@ -47,6 +28,13 @@ class App extends Component {
     this.setSearchTopstories = this.setSearchTopstories.bind(this);
     this.fetchSearchTopstories = this.fetchSearchTopstories.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
+  }
+
+  onSearchSubmit(event) {
+    const { query } = this.state;
+    this.fetchSearchTopstories(query);
+    event.preventDefault();
   }
 
   setSearchTopstories(result) {
@@ -77,55 +65,26 @@ class App extends Component {
     return (
       <div className="page">
         <div className="interactions">
-          <Search value={query} onChange={this.onSearchChange}>
+          <Search value={query} onChange={this.onSearchChange} onSubmit={this.onSearchSubmit}>
             Search
           </Search>
         </div>
-        { result ? <Table list={result.this} pattern={query} /> : null }
+        { result && <Table list={result.hits} /> }
       </div>
     );
   }
 }
 
-  // class Search extends Component {
-  //
-  //   render () {
-  //     const { value, onChange, children } = this.props;
-  //     return (
-  //       <form>
-  //         {children} <input type="text" value={value} onChange={onChange} />
-  //       </form>
-  //     );
-  //   }
-  // }
-
-  const Search = ({value, onChange, children}) =>
-    <form>
-      {children} <input type="text" value={value} onChange={onChange} />
+  const Search = ({ value, onChange, onSubmit, children }) =>
+    <form onSubmit={onSubmit}>
+      <input type="text" value={value} onChange={onChange} />
+      <button type="submit">{children}</button>
     </form>
 
-  // class Table extends Component {
-  //
-  //   render () {
-  //     const { list, pattern } = this.props;
-  //     return (
-  //       <div>
-  //       { list.filter(isSearched(pattern)).map((item) =>
-  //           <div key={item.objectID}>
-  //             <span><a href={item.url}>{item.title}</a></span>
-  //             <span>{item.author}</span>
-  //             <span>{item.num_comments}</span>
-  //             <span>{item.points}</span>
-  //           </div>
-  //       )}
-  //       </div>
-  //     );
-  //   }
-  // }
-
-  const Table = ({ list, pattern }) =>
-    <div className="table">
-    { list.filter(isSearched(pattern)).map((item) =>
+  const Table = ({ list }) => {
+    console.log(list);
+    return ( <div className="table">
+    { list.map((item) =>
       <div key={item.objectID} className="table-row">
         <span style={{ width: '40%' }}>
           <a href={item.url}>{item.title}</a>
@@ -141,7 +100,7 @@ class App extends Component {
         </span>
       </div>
     )}
-    </div>
-
+  </div> )
+}
 
 export default App;
